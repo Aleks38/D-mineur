@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "359957603706",
+    "project_id": "demineur-fbb25",
+    "storage_bucket": "demineur-fbb25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359957603706:android:321a3d013b807b62d8e2c3",
+        "android_client_info": {
+          "package_name": "com.example.tp02"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSN6W-7lNxGrxO9vP4Q7Ejt9O5iRTph3E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
