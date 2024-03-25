@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:tp02/modele/player.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tp02/riverpod/game/game_notifier.dart';
 import 'package:tp02/screens/ecran_grille.dart';
 import 'package:tp02/widgets/leader_board.dart';
 
-class EcranAccueil extends StatefulWidget {
+class EcranAccueil extends ConsumerStatefulWidget {
   const EcranAccueil({super.key});
 
   @override
-  State<EcranAccueil> createState() => _EcranAccueilState();
+  ConsumerState<EcranAccueil> createState() => _EcranAccueilState();
 }
 
-class _EcranAccueilState extends State<EcranAccueil> {
+class _EcranAccueilState extends ConsumerState<EcranAccueil> {
   // Contrôleur du champ texte "titre". Son attribut text contient le texte saisi
   final _pseudoController = TextEditingController();
 
@@ -39,16 +40,7 @@ class _EcranAccueilState extends State<EcranAccueil> {
           ],
         ),
       );
-    } else {
-      PlayerList().addItem(Player(name: _pseudoController.text, date: DateTime.now()));
-      PlayerList().sortByDate();
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EcranGrille(difficulte: _selectedDifficulty),
-        ),
-      );
-    }
+    } else {}
   }
 
   @override
@@ -64,48 +56,63 @@ class _EcranAccueilState extends State<EcranAccueil> {
           Center(
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextField(
-                    controller: _pseudoController,
-                    maxLength: 50,
-                    decoration: const InputDecoration(
-                      label: Text('Pseudo'),
+              child: Form(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      controller: _pseudoController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      maxLength: 50,
+                      decoration: const InputDecoration(
+                        label: Text('Pseudo'),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      DropdownButton(
-                        value: _selectedDifficulty,
-                        items: Difficulte.values
-                            .map(
-                              (category) => DropdownMenuItem(
-                                value: category,
-                                child: Text(
-                                  category.name.toUpperCase(),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        DropdownButton(
+                          value: _selectedDifficulty,
+                          items: Difficulte.values
+                              .map(
+                                (category) => DropdownMenuItem(
+                                  value: category,
+                                  child: Text(
+                                    category.name.toUpperCase(),
+                                  ),
                                 ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                _selectedDifficulty = value;
+                              });
+                            }
+                          },
+                        ),
+                        const Spacer(),
+                        ElevatedButton(
+                          onPressed: () {
+                            ref.read(gameProvider.notifier).addPlayer(_pseudoController.text, DateTime.now());
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EcranGrille(difficulte: _selectedDifficulty),
                               ),
-                            )
-                            .toList(),
-                        onChanged: (value) {
-                          if (value == null) {
-                            return;
-                          }
-                          setState(() {
-                            _selectedDifficulty = value;
-                          });
-                        },
-                      ),
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: _submitExpenseData,
-                        child: const Text('Jouer'),
-                      ),
-                    ],
-                  ),
-                ],
+                            );
+                          },
+                          child: const Text('Jouer'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

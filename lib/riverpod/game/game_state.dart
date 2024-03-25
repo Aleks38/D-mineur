@@ -7,10 +7,7 @@ part 'game_state.freezed.dart';
 @freezed
 class GameState with _$GameState {
   factory GameState({
-    String? playerName,
-    int? playerScore,
-    int? playerTime,
-    DateTime? dateGame,
+    Player? player,
     required List<Player> players,
   }) = _GameState;
 

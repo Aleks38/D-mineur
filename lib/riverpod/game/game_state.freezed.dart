@@ -16,10 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$GameState {
-  String? get playerName => throw _privateConstructorUsedError;
-  int? get playerScore => throw _privateConstructorUsedError;
-  int? get playerTime => throw _privateConstructorUsedError;
-  DateTime? get dateGame => throw _privateConstructorUsedError;
+  Player? get player => throw _privateConstructorUsedError;
   List<Player> get players => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,12 +29,7 @@ abstract class $GameStateCopyWith<$Res> {
   factory $GameStateCopyWith(GameState value, $Res Function(GameState) then) =
       _$GameStateCopyWithImpl<$Res, GameState>;
   @useResult
-  $Res call(
-      {String? playerName,
-      int? playerScore,
-      int? playerTime,
-      DateTime? dateGame,
-      List<Player> players});
+  $Res call({Player? player, List<Player> players});
 }
 
 /// @nodoc
@@ -53,29 +45,14 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playerName = freezed,
-    Object? playerScore = freezed,
-    Object? playerTime = freezed,
-    Object? dateGame = freezed,
+    Object? player = freezed,
     Object? players = null,
   }) {
     return _then(_value.copyWith(
-      playerName: freezed == playerName
-          ? _value.playerName
-          : playerName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      playerScore: freezed == playerScore
-          ? _value.playerScore
-          : playerScore // ignore: cast_nullable_to_non_nullable
-              as int?,
-      playerTime: freezed == playerTime
-          ? _value.playerTime
-          : playerTime // ignore: cast_nullable_to_non_nullable
-              as int?,
-      dateGame: freezed == dateGame
-          ? _value.dateGame
-          : dateGame // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      player: freezed == player
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as Player?,
       players: null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
@@ -92,12 +69,7 @@ abstract class _$$GameStateImplCopyWith<$Res>
       __$$GameStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? playerName,
-      int? playerScore,
-      int? playerTime,
-      DateTime? dateGame,
-      List<Player> players});
+  $Res call({Player? player, List<Player> players});
 }
 
 /// @nodoc
@@ -111,29 +83,14 @@ class __$$GameStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playerName = freezed,
-    Object? playerScore = freezed,
-    Object? playerTime = freezed,
-    Object? dateGame = freezed,
+    Object? player = freezed,
     Object? players = null,
   }) {
     return _then(_$GameStateImpl(
-      playerName: freezed == playerName
-          ? _value.playerName
-          : playerName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      playerScore: freezed == playerScore
-          ? _value.playerScore
-          : playerScore // ignore: cast_nullable_to_non_nullable
-              as int?,
-      playerTime: freezed == playerTime
-          ? _value.playerTime
-          : playerTime // ignore: cast_nullable_to_non_nullable
-              as int?,
-      dateGame: freezed == dateGame
-          ? _value.dateGame
-          : dateGame // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      player: freezed == player
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as Player?,
       players: null == players
           ? _value._players
           : players // ignore: cast_nullable_to_non_nullable
@@ -145,22 +102,11 @@ class __$$GameStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$GameStateImpl implements _GameState {
-  _$GameStateImpl(
-      {this.playerName,
-      this.playerScore,
-      this.playerTime,
-      this.dateGame,
-      required final List<Player> players})
+  _$GameStateImpl({this.player, required final List<Player> players})
       : _players = players;
 
   @override
-  final String? playerName;
-  @override
-  final int? playerScore;
-  @override
-  final int? playerTime;
-  @override
-  final DateTime? dateGame;
+  final Player? player;
   final List<Player> _players;
   @override
   List<Player> get players {
@@ -171,7 +117,7 @@ class _$GameStateImpl implements _GameState {
 
   @override
   String toString() {
-    return 'GameState(playerName: $playerName, playerScore: $playerScore, playerTime: $playerTime, dateGame: $dateGame, players: $players)';
+    return 'GameState(player: $player, players: $players)';
   }
 
   @override
@@ -179,20 +125,13 @@ class _$GameStateImpl implements _GameState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GameStateImpl &&
-            (identical(other.playerName, playerName) ||
-                other.playerName == playerName) &&
-            (identical(other.playerScore, playerScore) ||
-                other.playerScore == playerScore) &&
-            (identical(other.playerTime, playerTime) ||
-                other.playerTime == playerTime) &&
-            (identical(other.dateGame, dateGame) ||
-                other.dateGame == dateGame) &&
+            (identical(other.player, player) || other.player == player) &&
             const DeepCollectionEquality().equals(other._players, _players));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, playerName, playerScore,
-      playerTime, dateGame, const DeepCollectionEquality().hash(_players));
+  int get hashCode => Object.hash(
+      runtimeType, player, const DeepCollectionEquality().hash(_players));
 
   @JsonKey(ignore: true)
   @override
@@ -203,20 +142,11 @@ class _$GameStateImpl implements _GameState {
 
 abstract class _GameState implements GameState {
   factory _GameState(
-      {final String? playerName,
-      final int? playerScore,
-      final int? playerTime,
-      final DateTime? dateGame,
+      {final Player? player,
       required final List<Player> players}) = _$GameStateImpl;
 
   @override
-  String? get playerName;
-  @override
-  int? get playerScore;
-  @override
-  int? get playerTime;
-  @override
-  DateTime? get dateGame;
+  Player? get player;
   @override
   List<Player> get players;
   @override

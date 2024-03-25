@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:tp02/riverpod/game/game_notifier.dart';
 
-import '../modele/player.dart';
 import 'ecran_acceuil.dart';
 
-class EcranScore extends StatefulWidget {
-  final int chrono;
-  final int score;
-
-  const EcranScore({super.key, required this.chrono, required this.score});
+class EcranScore extends ConsumerWidget {
+  const EcranScore({super.key});
 
   @override
-  State<EcranScore> createState() => _EcranScoreState();
-}
-
-class _EcranScoreState extends State<EcranScore> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentPlayer = ref.watch(gameProvider).player;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Démineur - Score obtenu"),
@@ -26,9 +20,10 @@ class _EcranScoreState extends State<EcranScore> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("${PlayerList().list[0].name}, Vous avez fini en ${StopWatchTimer.getDisplayTime(widget.chrono, hours: false)} secondes."),
+            Text(
+                "${currentPlayer!.name}, Vous avez fini en ${StopWatchTimer.getDisplayTime(currentPlayer.time ?? 0, hours: false)} secondes."),
             const SizedBox(height: 30),
-            Text("Votre score : ${widget.score}"),
+            Text("Votre score : ${currentPlayer.score}"),
             const SizedBox(height: 30),
             ElevatedButton(
                 onPressed: () {

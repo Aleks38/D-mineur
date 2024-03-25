@@ -1,26 +1,27 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:tp02/modele/player.dart';
 
 import '../modele/case.dart';
 import '../modele/coup.dart';
 import '../modele/grille.dart';
+import '../riverpod/game/game_notifier.dart';
 import 'ecran_score.dart';
 
 enum Difficulte { facile, moyen, difficile }
 
-class EcranGrille extends StatefulWidget {
+class EcranGrille extends ConsumerStatefulWidget {
   final Difficulte difficulte;
 
   EcranGrille({super.key, required this.difficulte});
 
   @override
-  _EcranGrilleState createState() => _EcranGrilleState();
+  ConsumerState createState() => _EcranGrilleState();
 }
 
-class _EcranGrilleState extends State<EcranGrille> {
+class _EcranGrilleState extends ConsumerState<EcranGrille> {
   late Grille grille;
   bool finDePartie = false;
   late int time;
@@ -229,11 +230,8 @@ class _EcranGrilleState extends State<EcranGrille> {
                   MaterialPageRoute(
                     builder: (context) {
                       stop();
-                      PlayerList().updatePlayer(score, time);
-                      return EcranScore(
-                        chrono: time,
-                        score: score,
-                      );
+                      ref.read(gameProvider.notifier).scorePlayer(score, time);
+                      return const EcranScore();
                     },
                   ),
                 );
