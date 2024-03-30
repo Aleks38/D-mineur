@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:tp02/riverpod/player/player_notifier.dart';
 
 import '../modele/case.dart';
 import '../modele/coup.dart';
 import '../modele/grille.dart';
+import '../riverpod/player/player_notifier.dart';
 import 'ecran_score.dart';
 
 enum Difficulty { facile, moyen, difficile }

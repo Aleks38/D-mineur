@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tp02/riverpod/player/player_notifier.dart';
-import 'package:tp02/screens/ecran_grille.dart';
-import 'package:tp02/widgets/leader_board.dart';
+
+import '../riverpod/player/player_notifier.dart';
+import '../widgets/leader_board.dart';
+import 'ecran_grille.dart';
 
 class EcranAccueil extends ConsumerStatefulWidget {
   const EcranAccueil({super.key});
@@ -14,7 +15,13 @@ class EcranAccueil extends ConsumerStatefulWidget {
 }
 
 class _EcranAccueilState extends ConsumerState<EcranAccueil> {
-  Difficulty _selectedDifficulty = Difficulty.values[0];
+  late Difficulty selectedDifficulty;
+
+  @override
+  void initState() {
+    selectedDifficulty = ref.read(playerProvider).difficulty;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +46,7 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     DropdownButton(
-                      value: _selectedDifficulty,
+                      value: selectedDifficulty,
                       items: Difficulty.values
                           .map(
                             (category) => DropdownMenuItem(
@@ -53,7 +60,7 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
                       onChanged: (value) {
                         if (value != null) {
                           setState(() {
-                            _selectedDifficulty = value;
+                            selectedDifficulty = value;
                           });
                         }
                       },
@@ -66,11 +73,11 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
                         if (FirebaseAuth.instance.currentUser?.displayName != null) {
                           ref
                               .read(playerProvider.notifier)
-                              .addPlayer(FirebaseAuth.instance.currentUser!.displayName!, DateTime.now(), _selectedDifficulty);
+                              .addPlayer(FirebaseAuth.instance.currentUser!.displayName!, DateTime.now(), selectedDifficulty);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => EcranGrille(difficulty: _selectedDifficulty),
+                              builder: (context) => EcranGrille(difficulty: selectedDifficulty),
                             ),
                           );
                         } else {

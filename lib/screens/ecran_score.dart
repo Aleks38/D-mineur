@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:tp02/riverpod/leader_board/leader_board_notifier.dart';
-import 'package:tp02/riverpod/player/player_notifier.dart';
 
+import '../riverpod/leader_board/leader_board_notifier.dart';
+import '../riverpod/player/player_notifier.dart';
 import 'ecran_acceuil.dart';
 
 class EcranScore extends ConsumerWidget {
@@ -15,7 +15,7 @@ class EcranScore extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Démineur - Score obtenu"),
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(

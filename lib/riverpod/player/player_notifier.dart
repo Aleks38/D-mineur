@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demineur/riverpod/player/player_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tp02/riverpod/player/player_state.dart';
-import 'package:tp02/screens/ecran_grille.dart';
+
+import '../../screens/ecran_grille.dart';
 
 CollectionReference eventsRef = FirebaseFirestore.instance.collection("LeaderBoard");
 
