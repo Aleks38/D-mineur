@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../riverpod/game/game_notifier.dart';
 
@@ -36,6 +38,8 @@ class LeaderBoardState extends ConsumerState<LeaderBoard> {
                     itemCount: leaderBoard.length < 10 ? leaderBoard.length : 10,
                     itemBuilder: (context, index) {
                       final player = leaderBoard[index];
+                      Timestamp timestamp = player["timestamp"];
+                      DateTime date = timestamp.toDate();
                       return Card(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15.0),
@@ -71,6 +75,8 @@ class LeaderBoardState extends ConsumerState<LeaderBoard> {
                               children: [
                                 const SizedBox(width: 5),
                                 Text('${player["userName"]} : ${player["score"]}'),
+                                const Spacer(),
+                                Text(DateFormat('dd/MM/yyyy').format(date)),
                               ],
                             ),
                           ),

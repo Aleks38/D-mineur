@@ -3,7 +3,6 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tp02/screens/ecran_grille.dart';
-import 'package:tp02/widgets/history.dart';
 import 'package:tp02/widgets/leader_board.dart';
 
 import '../riverpod/game/game_notifier.dart';
@@ -24,64 +23,50 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
       appBar: AppBar(
         title: const Text("Démineur - Choisir la difficulté"),
         automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute<ProfileScreen>(
-                  builder: (context) => const ProfileScreen(),
-                ),
-              );
-            },
-          ),
-          const SignOutButton(),
-        ],
       ),
       body: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Center(
+          Padding(
+            padding: const EdgeInsets.all(20),
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.5,
-              child: Form(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      width: 650,
-                      child: Text(
-                        'Pour apparaître dans le LeaderBoard, ajoutez-vous un pseudo dans la rubrique "Mon compte" en haut à droite de votre écran.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20, color: Colors.red),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        DropdownButton(
-                          value: _selectedDifficulty,
-                          items: Difficulty.values
-                              .map(
-                                (category) => DropdownMenuItem(
-                                  value: category,
-                                  child: Text(
-                                    category.name.toUpperCase(),
-                                  ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: const ProfileScreen(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DropdownButton(
+                        value: _selectedDifficulty,
+                        items: Difficulty.values
+                            .map(
+                              (category) => DropdownMenuItem(
+                                value: category,
+                                child: Text(
+                                  category.name.toUpperCase(),
                                 ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            if (value != null) {
-                              setState(() {
-                                _selectedDifficulty = value;
-                              });
-                            }
-                          },
-                        ),
-                        const Spacer(),
-                        ElevatedButton(
-                          onPressed: () async {
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _selectedDifficulty = value;
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        width: 50,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (FirebaseAuth.instance.currentUser?.displayName != null) {
                             ref
                                 .read(gameProvider.notifier)
                                 .addPlayer(FirebaseAuth.instance.currentUser?.displayName, DateTime.now(), _selectedDifficulty);
@@ -91,14 +76,27 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
                                 builder: (context) => EcranGrille(difficulty: _selectedDifficulty),
                               ),
                             );
-                          },
-                          child: const Text('Jouer'),
-                        ),
-                      ],
-                    ),
-                    const History()
-                  ],
-                ),
+                          } else {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Pseudo manquant'),
+                                content: const Text('Veuillez ajouter un pseudo afin de pouvoir lancer une partie.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context, 'OK'),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                        child: const Text('Jouer'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

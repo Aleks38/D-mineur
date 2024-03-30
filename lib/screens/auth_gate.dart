@@ -16,21 +16,12 @@ class AuthGate extends StatelessWidget {
             providers: [
               EmailAuthProvider(),
             ],
-            headerBuilder: (context, constraints, shrinkOffset) {
-              return Padding(
-                padding: const EdgeInsets.all(20),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Image.asset('flutterfire_300x.png'),
-                ),
-              );
-            },
             subtitleBuilder: (context, action) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: action == AuthAction.signIn
-                    ? const Text('Welcome to FlutterFire, please sign in!')
-                    : const Text('Welcome to Flutterfire, please sign up!'),
+                    ? const Text('Bienvenue sur mon démineur. Connectez-vous')
+                    : const Text('Bienvenue sur mon démineur. Enregistrez-vous'),
               );
             },
             sideBuilder: (context, shrinkOffset) {
@@ -38,7 +29,7 @@ class AuthGate extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Image.asset('flutterfire_300x.png'),
+                  child: Image.asset('images/logo.jpeg'),
                 ),
               );
             },
