@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:tp02/riverpod/game/game_notifier.dart';
+import 'package:tp02/riverpod/leader_board/leader_board_notifier.dart';
+import 'package:tp02/riverpod/player/player_notifier.dart';
 
 import 'ecran_acceuil.dart';
 
@@ -10,7 +11,7 @@ class EcranScore extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentPlayer = ref.watch(gameProvider).player;
+    final currentPlayer = ref.watch(playerProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Démineur - Score obtenu"),
@@ -21,15 +22,13 @@ class EcranScore extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-                "${currentPlayer!.name ?? "Joueur"} , Vous avez fini en ${StopWatchTimer.getDisplayTime(currentPlayer.time ?? 0, hours: false)} secondes."),
+                "${currentPlayer.userName} , Vous avez fini en ${StopWatchTimer.getDisplayTime(currentPlayer.time ?? 0, hours: false)} secondes."),
             const SizedBox(height: 30),
             Text("Votre score : ${currentPlayer.score}"),
             const SizedBox(height: 30),
             ElevatedButton(
                 onPressed: () {
-                  if (currentPlayer.name != null) {
-                    ref.read(gameProvider.notifier).addToLeaderBoard();
-                  }
+                  ref.read(leaderBoardProvider.notifier).addToLeaderBoard(currentPlayer);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

@@ -2,10 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tp02/riverpod/player/player_notifier.dart';
 import 'package:tp02/screens/ecran_grille.dart';
 import 'package:tp02/widgets/leader_board.dart';
-
-import '../riverpod/game/game_notifier.dart';
 
 class EcranAccueil extends ConsumerStatefulWidget {
   const EcranAccueil({super.key});
@@ -66,8 +65,8 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
                       onPressed: () async {
                         if (FirebaseAuth.instance.currentUser?.displayName != null) {
                           ref
-                              .read(gameProvider.notifier)
-                              .addPlayer(FirebaseAuth.instance.currentUser?.displayName, DateTime.now(), _selectedDifficulty);
+                              .read(playerProvider.notifier)
+                              .addPlayer(FirebaseAuth.instance.currentUser!.displayName!, DateTime.now(), _selectedDifficulty);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

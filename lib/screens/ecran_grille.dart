@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:tp02/riverpod/player/player_notifier.dart';
 
 import '../modele/case.dart';
 import '../modele/coup.dart';
 import '../modele/grille.dart';
-import '../riverpod/game/game_notifier.dart';
 import 'ecran_score.dart';
 
 enum Difficulty { facile, moyen, difficile }
@@ -224,15 +224,13 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
           ),
           if (finDePartie)
             ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
+                stop();
+                ref.read(playerProvider.notifier).scorePlayer(score, time);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) {
-                      stop();
-                      ref.read(gameProvider.notifier).scorePlayer(score, time);
-                      return const EcranScore();
-                    },
+                    builder: (context) => const EcranScore(),
                   ),
                 );
               },
