@@ -21,12 +21,15 @@ class EcranScore extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-                "${currentPlayer!.name}, Vous avez fini en ${StopWatchTimer.getDisplayTime(currentPlayer.time ?? 0, hours: false)} secondes."),
+                "${currentPlayer!.name ?? "Joueur"} , Vous avez fini en ${StopWatchTimer.getDisplayTime(currentPlayer.time ?? 0, hours: false)} secondes."),
             const SizedBox(height: 30),
             Text("Votre score : ${currentPlayer.score}"),
             const SizedBox(height: 30),
             ElevatedButton(
                 onPressed: () {
+                  if (currentPlayer.name != null) {
+                    ref.read(gameProvider.notifier).addToLeaderBoard();
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(

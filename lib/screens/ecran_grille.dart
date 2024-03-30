@@ -10,12 +10,12 @@ import '../modele/grille.dart';
 import '../riverpod/game/game_notifier.dart';
 import 'ecran_score.dart';
 
-enum Difficulte { facile, moyen, difficile }
+enum Difficulty { facile, moyen, difficile }
 
 class EcranGrille extends ConsumerStatefulWidget {
-  final Difficulte difficulte;
+  final Difficulty difficulty;
 
-  EcranGrille({super.key, required this.difficulte});
+  const EcranGrille({super.key, required this.difficulty});
 
   @override
   ConsumerState createState() => _EcranGrilleState();
@@ -37,23 +37,23 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
   }
 
   Grille _initialiserGrille() {
-    switch (widget.difficulte) {
-      case Difficulte.facile:
+    switch (widget.difficulty) {
+      case Difficulty.facile:
         return Grille(taille: 5, nbMines: 3);
-      case Difficulte.moyen:
+      case Difficulty.moyen:
         return Grille(taille: 7, nbMines: 5);
-      case Difficulte.difficile:
+      case Difficulty.difficile:
         return Grille(taille: 10, nbMines: 10);
     }
   }
 
   Text _initialiserTitre() {
-    switch (widget.difficulte) {
-      case Difficulte.facile:
+    switch (widget.difficulty) {
+      case Difficulty.facile:
         return const Text("Grille 5x5 - 3 mines");
-      case Difficulte.moyen:
+      case Difficulty.moyen:
         return const Text("Grille 7x7 - 5 mines");
-      case Difficulte.difficile:
+      case Difficulty.difficile:
         return const Text("Grille 10x10 - 10 mines");
     }
   }
@@ -120,7 +120,7 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
                       start();
                       setState(() {
                         grille.mettreAJour(Coup(ligne, colonne, ActionCase.decouvrir));
-                        finDePartie = verif(grille);
+                        finDePartie = check(grille);
                       });
                     },
               onLongPress: finDePartie
@@ -128,7 +128,7 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
                   : () {
                       setState(() {
                         grille.mettreAJour(Coup(ligne, colonne, ActionCase.marquer));
-                        finDePartie = verif(grille);
+                        finDePartie = check(grille);
                       });
                     },
               child: Container(
@@ -149,7 +149,7 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
     );
   }
 
-  bool verif(Grille maGrille) {
+  bool check(Grille maGrille) {
     if (maGrille.isFinie()) {
       stop();
       afficherGrille();

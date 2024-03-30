@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tp02/riverpod/game/game_notifier.dart';
 import 'package:tp02/screens/ecran_grille.dart';
+import 'package:tp02/widgets/history.dart';
 import 'package:tp02/widgets/leader_board.dart';
+
+import '../riverpod/game/game_notifier.dart';
 
 class EcranAccueil extends ConsumerStatefulWidget {
   const EcranAccueil({super.key});
@@ -12,36 +16,7 @@ class EcranAccueil extends ConsumerStatefulWidget {
 }
 
 class _EcranAccueilState extends ConsumerState<EcranAccueil> {
-  // Contrôleur du champ texte "titre". Son attribut text contient le texte saisi
-  final _pseudoController = TextEditingController();
-
-  // La catégorie saisie dans le formulaire (modifiée par un DropdownButton)
-  Difficulte _selectedDifficulty = Difficulte.values[0];
-
-  // Validation des données du formulaire
-  //  et soumission si données correctes
-  void _submitExpenseData() {
-    // Si le titre est vide, le montant non correct ou la date vide
-    //  on montre un dialogue pour demander à l'utilisateur de corriger
-    if (_pseudoController.text.trim().isEmpty) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Saisie Non Valide'),
-          content: const Text('Vous devez saisir un titre, un montant, une date et une catégorie valides.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // on dépile le dialogue de l'UI
-                Navigator.pop(ctx);
-              },
-              child: const Text('Ok'),
-            ),
-          ],
-        ),
-      );
-    } else {}
-  }
+  Difficulty _selectedDifficulty = Difficulty.values[0];
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +24,20 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
       appBar: AppBar(
         title: const Text("Démineur - Choisir la difficulté"),
         automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<ProfileScreen>(
+                  builder: (context) => const ProfileScreen(),
+                ),
+              );
+            },
+          ),
+          const SignOutButton(),
+        ],
       ),
       body: Row(
         mainAxisSize: MainAxisSize.max,
@@ -60,25 +49,19 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextFormField(
-                      controller: _pseudoController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      maxLength: 50,
-                      decoration: const InputDecoration(
-                        label: Text('Pseudo'),
+                    const SizedBox(
+                      width: 650,
+                      child: Text(
+                        'Pour apparaître dans le LeaderBoard, ajoutez-vous un pseudo dans la rubrique "Mon compte" en haut à droite de votre écran.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20, color: Colors.red),
                       ),
                     ),
-                    const SizedBox(height: 16),
                     Row(
                       children: [
                         DropdownButton(
                           value: _selectedDifficulty,
-                          items: Difficulte.values
+                          items: Difficulty.values
                               .map(
                                 (category) => DropdownMenuItem(
                                   value: category,
@@ -98,12 +81,14 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
                         ),
                         const Spacer(),
                         ElevatedButton(
-                          onPressed: () {
-                            ref.read(gameProvider.notifier).addPlayer(_pseudoController.text, DateTime.now());
+                          onPressed: () async {
+                            ref
+                                .read(gameProvider.notifier)
+                                .addPlayer(FirebaseAuth.instance.currentUser?.displayName, DateTime.now(), _selectedDifficulty);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EcranGrille(difficulte: _selectedDifficulty),
+                                builder: (context) => EcranGrille(difficulty: _selectedDifficulty),
                               ),
                             );
                           },
@@ -111,16 +96,13 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
                         ),
                       ],
                     ),
+                    const History()
                   ],
                 ),
               ),
             ),
           ),
-          const SizedBox(
-            width: 500,
-            height: 500,
-            child: LeaderBoard(),
-          ),
+          const LeaderBoard(),
         ],
       ),
     );

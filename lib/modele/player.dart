@@ -1,55 +1,57 @@
+import '../screens/ecran_grille.dart';
+
 class Player {
-  String name;
+  String? name;
   DateTime date;
   int? score;
   int? time;
+  Difficulty difficulty;
 
-  Player({required this.name, required this.date, this.score, this.time});
+  Player({this.name, required this.date, this.score, this.time, required this.difficulty});
 }
 
 class PlayerList {
-  static final PlayerList _instance = PlayerList._internal();
-
-  factory PlayerList() {
-    return _instance;
-  }
-
-  PlayerList._internal();
-
-  final List<Player> _players = [
-    Player(name: "Alexy", date: DateTime.now(), score: 8, time: 20),
-    Player(name: "Alexy", date: DateTime.now(), score: 0, time: 20),
-    Player(name: "Alexy", date: DateTime.now(), score: 2, time: 20),
-    Player(name: "Alexy", date: DateTime.now(), score: 10, time: 20),
-    Player(name: "Alexy", date: DateTime.now(), score: 19, time: 20),
-    Player(name: "Alexy", date: DateTime.now(), score: 4, time: 20),
-    Player(name: "Alexy", date: DateTime.now(), score: 1, time: 20),
+  final List<Player> playerHistory = [
+    Player(name: "Alexy", date: DateTime.now(), score: 8, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 0, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 2, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 10, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 19, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 4, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 1, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 1, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 1, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 1, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 1, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 1, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 1, time: 20, difficulty: Difficulty.difficile),
+    Player(name: "Alexy", date: DateTime.now(), score: 1, time: 20, difficulty: Difficulty.difficile),
   ];
 
-  List<Player> get list => _players;
+  List<Player> get list => playerHistory;
 
   void addItem(Player item) {
-    _players.add(item);
+    playerHistory.add(item);
   }
 
   void removeItem(Player item) {
-    _players.remove(item);
+    playerHistory.remove(item);
   }
 
   void clearList() {
-    _players.clear();
+    playerHistory.clear();
   }
 
   void sortByDate() {
-    _players.sort((a, b) => b.date.compareTo(a.date));
+    playerHistory.sort((a, b) => b.date.compareTo(a.date));
   }
 
   void sortByScore() {
-    _players.sort((a, b) => b.score!.compareTo(a.score as num));
+    playerHistory.sort((a, b) => b.score!.compareTo(a.score as num));
   }
 
   void updatePlayer(int score, int time) {
-    _players.first.score = score;
-    _players.first.time = time;
+    playerHistory.first.score = score;
+    playerHistory.first.time = time;
   }
 }
