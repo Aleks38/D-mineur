@@ -27,77 +27,74 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
       body: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: const ProfileScreen(),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      DropdownButton(
-                        value: _selectedDifficulty,
-                        items: Difficulty.values
-                            .map(
-                              (category) => DropdownMenuItem(
-                                value: category,
-                                child: Text(
-                                  category.name.toUpperCase(),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: const ProfileScreen(),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    DropdownButton(
+                      value: _selectedDifficulty,
+                      items: Difficulty.values
+                          .map(
+                            (category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(
+                                category.name.toUpperCase(),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _selectedDifficulty = value;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      width: 50,
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (FirebaseAuth.instance.currentUser?.displayName != null) {
+                          ref
+                              .read(gameProvider.notifier)
+                              .addPlayer(FirebaseAuth.instance.currentUser?.displayName, DateTime.now(), _selectedDifficulty);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EcranGrille(difficulty: _selectedDifficulty),
+                            ),
+                          );
+                        } else {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Pseudo manquant'),
+                              content: const Text('Veuillez ajouter un pseudo afin de pouvoir lancer une partie.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const Text('OK'),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() {
-                              _selectedDifficulty = value;
-                            });
-                          }
-                        },
-                      ),
-                      const SizedBox(
-                        width: 50,
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (FirebaseAuth.instance.currentUser?.displayName != null) {
-                            ref
-                                .read(gameProvider.notifier)
-                                .addPlayer(FirebaseAuth.instance.currentUser?.displayName, DateTime.now(), _selectedDifficulty);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EcranGrille(difficulty: _selectedDifficulty),
-                              ),
-                            );
-                          } else {
-                            showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text('Pseudo manquant'),
-                                content: const Text('Veuillez ajouter un pseudo afin de pouvoir lancer une partie.'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context, 'OK'),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
-                        child: const Text('Jouer'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Jouer'),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           const LeaderBoard(),

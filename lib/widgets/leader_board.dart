@@ -32,7 +32,7 @@ class LeaderBoardState extends ConsumerState<LeaderBoard> {
                   style: TextStyle(fontSize: 25),
                 ),
                 SizedBox(
-                  width: 500,
+                  width: 600,
                   height: 600,
                   child: ListView.builder(
                     itemCount: leaderBoard.length < 10 ? leaderBoard.length : 10,
