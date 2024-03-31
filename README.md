@@ -42,3 +42,14 @@ Un leaderboard global est affiché sur l'écran d'accueil. Il a été fait grâc
 ### Difficulty level
 
 Il y a la possibilité de choisir la difficulté du démineur au lancement de chaque partie.
+
+
+## Work to do
+
+### Step
+
+J'ai atteint le **TP7**.
+
+### Difficulties encountered
+
+Je n'ai pas rencontré de difficulté lors de ce projet.
