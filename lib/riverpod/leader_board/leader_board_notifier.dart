@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../player/player_state.dart';
 import 'leader_board_state.dart';
 
+// Instancie la connexion avec Firestore
 CollectionReference eventsRef = FirebaseFirestore.instance.collection("LeaderBoard");
 
 final leaderBoardProvider = StateNotifierProvider<LeaderBoardNotifier, LeaderBoardState>(
@@ -11,14 +12,12 @@ final leaderBoardProvider = StateNotifierProvider<LeaderBoardNotifier, LeaderBoa
 );
 
 class LeaderBoardNotifier extends StateNotifier<LeaderBoardState> {
+  // Initialisation du notifier
   LeaderBoardNotifier() : super(LeaderBoardState.initial()) {
-    load();
+    getLeaderBoard();
   }
 
-  Future<void> load() async {
-    await getLeaderBoard();
-  }
-
+  // Ajouter un joueur à la BDD Firestore
   Future<void> addToLeaderBoard(PlayerState player) async {
     final user = <String, dynamic>{
       "userName": player.userName,
@@ -27,15 +26,18 @@ class LeaderBoardNotifier extends StateNotifier<LeaderBoardState> {
     };
 
     await eventsRef.add(user);
-    load();
+    getLeaderBoard();
   }
 
+  // Supprime un joueur de la BDD Firestore
   Future<void> deletePlayerFromLeaderBoard(String playerId) async {
     await eventsRef.doc(playerId).delete();
-    load();
+    getLeaderBoard();
   }
 
+  // Récupère les data dans la BDD
   Future<void> getLeaderBoard() async {
+    // Récupère et trie les données en fonction du score
     QuerySnapshot querySnapshot = await eventsRef.orderBy('score', descending: true).get();
     List<Map<String, dynamic>> leaderBoardData = [];
     for (var doc in querySnapshot.docs) {

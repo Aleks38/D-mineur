@@ -12,6 +12,7 @@ class EcranScore extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPlayer = ref.watch(playerProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Démineur - Score obtenu"),

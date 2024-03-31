@@ -11,6 +11,8 @@ class LeaderBoard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var leaderBoard = ref.watch(leaderBoardProvider).players;
+    int maxSizeLeaderBoard = 10;
+
     if (leaderBoard.isNotEmpty) {
       return Column(
         children: [
@@ -22,9 +24,10 @@ class LeaderBoard extends ConsumerWidget {
             width: 600,
             height: 600,
             child: ListView.builder(
-              itemCount: leaderBoard.length < 10 ? leaderBoard.length : 10,
+              itemCount: leaderBoard.length < maxSizeLeaderBoard ? leaderBoard.length : maxSizeLeaderBoard,
               itemBuilder: (context, index) {
                 final player = leaderBoard[index];
+                // Convertie le Timestamp Firestore en DateTime Dart
                 Timestamp timestamp = player["timestamp"];
                 DateTime date = timestamp.toDate();
                 return Card(

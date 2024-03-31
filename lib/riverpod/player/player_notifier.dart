@@ -11,16 +11,15 @@ final playerProvider = StateNotifierProvider<PLayerNotifier, PlayerState>(
 );
 
 class PLayerNotifier extends StateNotifier<PlayerState> {
-  PLayerNotifier() : super(PlayerState.initial()) {
-    load();
-  }
+  // Initialisation du notifier
+  PLayerNotifier() : super(PlayerState.initial());
 
-  Future<void> load() async {}
-
+  // Crée un joueur
   void addPlayer(String name, DateTime dateGame, Difficulty difficulty) {
     state = state.copyWith(userName: name, timestamp: dateGame, difficulty: difficulty);
   }
 
+  // Associe un score au joueur
   void scorePlayer(int score, int time) {
     state = state.copyWith(time: time, score: score);
   }

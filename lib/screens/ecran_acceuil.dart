@@ -65,11 +65,10 @@ class _EcranAccueilState extends ConsumerState<EcranAccueil> {
                         }
                       },
                     ),
-                    const SizedBox(
-                      width: 50,
-                    ),
+                    const SizedBox(width: 50),
                     ElevatedButton(
                       onPressed: () async {
+                        // Vérifie sur le joueur à bien ajouté un pseudo
                         if (FirebaseAuth.instance.currentUser?.displayName != null) {
                           ref
                               .read(playerProvider.notifier)

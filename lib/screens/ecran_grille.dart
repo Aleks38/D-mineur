@@ -23,8 +23,8 @@ class EcranGrille extends ConsumerStatefulWidget {
 
 class _EcranGrilleState extends ConsumerState<EcranGrille> {
   late Grille grille;
-  bool finDePartie = false;
   late int time;
+  bool finDePartie = false;
 
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
@@ -47,7 +47,7 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
     }
   }
 
-  Text _initialiserTitre() {
+  Text _initialiserTitle() {
     switch (widget.difficulty) {
       case Difficulty.facile:
         return const Text("Grille 5x5 - 3 mines");
@@ -117,10 +117,10 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
               onTap: finDePartie
                   ? null
                   : () {
-                      start();
+                      startTimer();
                       setState(() {
                         grille.mettreAJour(Coup(ligne, colonne, ActionCase.decouvrir));
-                        finDePartie = check(grille);
+                        finDePartie = checkIfItsFinish(grille);
                       });
                     },
               onLongPress: finDePartie
@@ -128,7 +128,7 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
                   : () {
                       setState(() {
                         grille.mettreAJour(Coup(ligne, colonne, ActionCase.marquer));
-                        finDePartie = check(grille);
+                        finDePartie = checkIfItsFinish(grille);
                       });
                     },
               child: Container(
@@ -149,34 +149,33 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
     );
   }
 
-  bool check(Grille maGrille) {
+  bool checkIfItsFinish(Grille maGrille) {
     if (maGrille.isFinie()) {
-      stop();
-      afficherGrille();
+      stopTimer();
+      displayGrille();
       return true;
     } else {
       return false;
     }
   }
 
-  void start() {
+  void startTimer() {
     _stopWatchTimer.onStartTimer();
   }
 
-  void stop() {
+  void stopTimer() {
     _stopWatchTimer.onStopTimer();
   }
 
-  // Calcul du score
-  int get score {
+  int get calculatesScore {
     if (grille.isPerdue()) return 0;
     double coeffTempsParCase = max(1.0, 10000.0 - time / (grille.taille * grille.taille - grille.nbMines).toDouble());
     double coeffDifficulte = 100.00;
     grille.nbMines.toDouble() / (grille.taille * grille.taille).toDouble();
-    return ((grille.taille * grille.taille - grille.nbMines).toDouble() * coeffTempsParCase / 100.0 * coeffDifficulte).toInt();
+    return ((grille.taille * grille.taille - grille.nbMines).toDouble() * coeffTempsParCase / coeffDifficulte * coeffDifficulte).toInt();
   }
 
-  void afficherGrille() async {
+  void displayGrille() async {
     for (int ligne = 0; ligne < grille.taille; ligne++) {
       for (int colonne = 0; colonne < grille.taille; colonne++) {
         Case maCase = grille.getCase((ligne: ligne, colonne: colonne));
@@ -200,7 +199,7 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _initialiserTitre(),
+          _initialiserTitle(),
           const SizedBox(height: 20),
           _maGrille(),
           StreamBuilder<int>(
@@ -225,8 +224,8 @@ class _EcranGrilleState extends ConsumerState<EcranGrille> {
           if (finDePartie)
             ElevatedButton(
               onPressed: () {
-                stop();
-                ref.read(playerProvider.notifier).scorePlayer(score, time);
+                stopTimer();
+                ref.read(playerProvider.notifier).scorePlayer(calculatesScore, time);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
